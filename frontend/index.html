@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Federated IoT IDS Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<div id="app">
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="brand">
+                <h1>Federated IoT IDS — Prototype</h1>
+                <p>IoT intrusion + anomaly detection • federated aggregation • concept drift</p>
+            </div>
+            <div class="badges" id="badges"></div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="overview">Overview</button>
+            <button class="tab-btn" data-tab="live">Live Events</button>
+            <button class="tab-btn" data-tab="stats">Stats</button>
+            <button class="tab-btn" data-tab="controls">Controls</button>
+        </div>
+
+        <!-- PANELS -->
+        <!-- OVERVIEW -->
+        <div class="tab-panel active" id="tab-overview">
+            <div class="grid">
+                <div>
+                    <div class="card">
+                        <div class="hd"><h2>Key Indicators</h2></div>
+                        <div class="bd">
+                            <div class="kpi">
+                                <div class="box">
+                                    <div class="label">Devices</div>
+                                    <div class="val" id="kpi-devices">0</div>
+                                </div>
+                                <div class="box">
+                                    <div class="label">Total events</div>
+                                    <div class="val" id="kpi-events">0</div>
+                                </div>
+                                <div class="box">
+                                    <div class="label">F1</div>
+                                    <div class="val" id="kpi-f1">-</div>
+                                </div>
+                                <div class="box">
+                                    <div class="label">Global acc</div>
+                                    <div class="val" id="kpi-acc">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="height:14px"></div>
+
+                    <div class="card">
+                        <div class="hd"><h2>Devices</h2></div>
+                        <div class="bd">
+                            <table class="table" id="devices-table">
+                                <thead>
+                                <tr>
+                                    <th>Device</th>
+                                    <th>Drift</th>
+                                    <th>Local acc</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="devices-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <div class="hd"><h2>Environment</h2></div>
+                        <div class="bd">
+                            <pre class="small" id="env-text"></pre>
+                        </div>
+                    </div>
+
+                    <div style="height:14px"></div>
+
+                    <div class="card">
+                        <div class="hd"><h2>What this shows</h2></div>
+                        <div class="bd">
+                  <pre class="small">
+• Local telemetry → anomaly & drift scoring
+• Adaptive metrics: F1, FP rate, global accuracy
+• Federated round with drift-aware weighting
+• Attack & drift controls with real-time feedback
+                  </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIVE EVENTS -->
+        <div class="tab-panel" id="tab-live">
+            <div class="grid">
+                <div class="card">
+                    <div class="hd">
+                        <h2>Telemetry stream</h2>
+                        <span class="small" id="telemetry-count"></span>
+                    </div>
+                    <div class="bd">
+                        <div class="stream" id="telemetry-stream"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="hd">
+                        <h2>Alerts</h2>
+                        <span class="small" id="alerts-count"></span>
+                    </div>
+                    <div class="bd">
+                        <div class="stream" id="alerts-stream"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="tab-panel" id="tab-stats">
+            <div class="grid">
+                <div class="card">
+                    <div class="hd"><h2>F1 & Global Accuracy over time</h2></div>
+                    <div class="bd">
+                        <canvas id="stats-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="hd"><h2>Current metrics</h2></div>
+                    <div class="bd">
+                        <pre class="small" id="stats-text"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="tab-panel" id="tab-controls">
+            <div class="grid">
+                <div>
+                    <div class="card">
+                        <div class="hd"><h2>Simulator</h2></div>
+                        <div class="bd">
+                            <div class="row">
+                                <button class="btn good" id="btn-sim-start">Start</button>
+                                <button class="btn" id="btn-sim-stop">Stop</button>
+                                <button class="btn bad" id="btn-sim-reset">Reset</button>
+                            </div>
+                            <div style="height:10px"></div>
+                            <div class="row">
+                                <span class="small">Attack type</span>
+                                <select id="attack-type">
+                                    <option value="none">none</option>
+                                    <option value="port_scan">port_scan</option>
+                                    <option value="bruteforce">bruteforce</option>
+                                    <option value="ddos">ddos</option>
+                                    <option value="exfiltration">exfiltration</option>
+                                    <option value="generic">generic</option>
+                                </select>
+
+                                <span class="small">Intensity</span>
+                                <input id="attack-level" type="range" min="0" max="1" step="0.05" value="0.6" />
+                                <span class="small mono" id="attack-level-val">0.60</span>
+
+                                <button class="btn primary" id="btn-apply-attack">Apply attack</button>
+                            </div>
+
+                            <div style="height:10px"></div>
+
+                            <div class="row">
+                                <span class="small">Drift level</span>
+                                <input id="drift-level" type="range" min="0" max="1" step="0.05" value="0.0" />
+                                <span class="small mono" id="drift-level-val">0.00</span>
+
+                                <button class="btn primary" id="btn-apply-drift">Apply drift</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="height:14px"></div>
+
+                    <div class="card">
+                        <div class="hd"><h2>Federated Learning</h2></div>
+                        <div class="bd">
+                            <p class="small">
+                                Runs one Adaptive FedAvg round using current device drift + local accuracies.
+                            </p>
+                            <button class="btn primary" id="btn-fl-round">Run FL round</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="hd"><h2>Devices</h2></div>
+                    <div class="bd">
+                        <button class="btn" id="btn-refresh-devices">Refresh devices</button>
+                        <div style="height:10px"></div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Device</th>
+                                <th>Drift</th>
+                                <th>Local acc</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="devices-tbody-ctrl"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

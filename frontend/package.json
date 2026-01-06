@@ -1,0 +1,17 @@
+{
+  "name": "federated-iot-ids-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 9003",
+    "build": "vite build",
+    "preview": "vite preview --port 9003"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}
