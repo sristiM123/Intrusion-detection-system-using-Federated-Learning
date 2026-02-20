@@ -1,9 +1,5 @@
-import { defineConfig } from "vite";
+import { defineConfig } from 'vite'
 
 export default defineConfig({
-  server: {
-    proxy: {
-      "/api": "http://localhost:9002"
-    }
-  }
-});
+  base: '/Intrusion-detection-system-using-Federated-Learning/', 
+})
