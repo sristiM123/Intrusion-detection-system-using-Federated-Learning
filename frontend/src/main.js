@@ -3,12 +3,13 @@ import "./style.css";
 import Chart from "chart.js/auto";
 
 // ---- CONFIG ----
+const RENDER_HOST = "intrusion-detection-system-using-1h6f.onrender.com";
 const WS_URL = window.location.hostname === "localhost"
   ? "ws://localhost:9002/ws"
-  : "wss:https://intrusion-detection-system-using-1h6f.onrender.com/ws";  // matches backend WebSocket path
+  : `wss://${RENDER_HOST}/ws`;
 const API_BASE = window.location.hostname === "localhost"
   ? "/api"
-  : "https://https://intrusion-detection-system-using-1h6f.onrender.com/api";;                  // all HTTP calls go to /api/...
+  : `https://${RENDER_HOST}/api`;
 
 // ---- STATE ----
 const state = {
