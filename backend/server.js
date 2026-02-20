@@ -439,7 +439,7 @@ wss.on("connection", (ws) => {
 });
 
 // -------------- Start server -----------------
-const PORT = 9002;
+const PORT = process.env.PORT || 9002;
 server.listen(PORT, () => {
   console.log(`Backend listening on http://localhost:${PORT}`);
 });
