@@ -5,7 +5,7 @@ import Chart from "chart.js/auto";
 // ---- CONFIG ----
 const WS_URL = window.location.hostname === "localhost"
   ? "ws://localhost:9002/ws"
-  : "wss://YOUR-APP-NAME.onrender.com/ws";  // matches backend WebSocket path
+  : "wss:https://intrusion-detection-system-using-1h6f.onrender.com/ws";  // matches backend WebSocket path
 const API_BASE = "/api";                  // all HTTP calls go to /api/...
 
 // ---- STATE ----
